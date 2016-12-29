@@ -1,0 +1,7 @@
+---                                                                                                                                                   
+- hosts: all 
+  vars:
+    my_user: tmolnar
+    my_group: tmolnar
+  tasks:
+    - include: tasks/main.yml
