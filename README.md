@@ -18,7 +18,7 @@ No other dependencies have been set.
 
 	- hosts: all
 		roles:
-		- {role: golang, go_target_version: go1.7.4, go_target_dir: /usr/local }
+		  - {role: golang, go_target_version: go1.7.4, go_target_dir: /usr/local }
 
 ## Dependencies
 
