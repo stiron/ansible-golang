@@ -11,6 +11,7 @@ No other dependencies have been set.
 ## Role variables
 
 `go_target_version` - consists of the "go" string and the exact target version, e.g. go1.7.4
+
 `go_target_dir` - target directory where the go tools must be extracted/installed
 
 ## Dependencies
