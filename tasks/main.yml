@@ -1,0 +1,58 @@
+---
+# Check if go is installed on the target system
+- name: Check if go is installed
+  shell: which go
+  failed_when: false
+  changed_when: false
+  environment:
+    PATH: "{{ ansible_env.PATH }}:{{ go_target_dir }}/go/bin"
+  register: go_local_binary
+  tags:
+    - go
+    - go_check
+
+# Check what version is installed
+- name: Query the local go version
+  shell: "{{ go_target_dir }}/go/bin/go version |cut -d' ' -f3"
+  failed_when: false
+  changed_when: false
+  environment:
+    PATH: "{{ ansible_env.PATH }}:{{ go_target_dir }}/go/bin"
+  register: go_local_version
+  tags:
+    - go
+    - go_check
+
+# If installed, then remove only the old version
+- name: Remove the old go package
+  file:
+    name: "{{ go_target_dir }}/go"
+    state: absent
+  tags:
+    - go
+    - go_remove
+  when: (go_local_binary.stdout != "") and
+        (go_local_version.stdout != go_target_version)
+
+# Download the archive of the target version
+- name: Download the go package
+  get_url:
+    url: "https://storage.googleapis.com/golang/{{ go_target_version }}.linux-amd64.tar.gz"
+    dest: "/tmp/{{ go_target_version }}.linux-amd64.tar.gz"
+  tags:
+     - go
+     - go_download
+  when: (go_local_binary.stdout == "") or
+        (go_local_version.stdout != go_target_version)
+
+# Extract the archive to the desired place
+- name: Extract the go archive
+  unarchive:
+    src: "/tmp/{{ go_target_version }}.linux-amd64.tar.gz"
+    dest: "{{ go_target_dir }}"
+  tags:
+    - go
+    - go_install
+  when: (go_local_binary.stdout == "") or
+        (go_local_version.stdout != go_target_version)
+
