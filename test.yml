@@ -3,5 +3,7 @@
   vars:
     my_user: tmolnar
     my_group: tmolnar
+    go_target_version: go1.7.4
+    go_target_dir: /usr/local
   tasks:
     - include: tasks/main.yml
