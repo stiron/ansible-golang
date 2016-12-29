@@ -26,7 +26,7 @@ None
 
 ## License
 
-TBA
+BSD
 
 ## Author
 
