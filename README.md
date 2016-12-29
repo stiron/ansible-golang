@@ -14,6 +14,12 @@ No other dependencies have been set.
 
 `go_target_dir` - target directory where the go tools must be extracted/installed
 
+## Examples
+
+	- hosts: all
+		roles:
+		- {role: golang, go_target_version: go1.7.4, go_target_dir: /usr/local }
+
 ## Dependencies
 
 None
