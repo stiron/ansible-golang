@@ -1,18 +1,9 @@
 Centos6Test:
   image: "centos:6"
   before_script:
-    - rpm -i https://dl.fedoraproject.org/pub/epel/epel-release-latest-6.noarch.rpm
-    - yum -y install ansible openssh-server openssh-client git 
-    - chkconfig sshd on
-    - service sshd start
+    - yum -y install ansible git 
     - echo 'pipelining = False' >> /etc/ansible/ansible.cfg
     - echo localhost > inventory
-    - useradd -m tmolnar
-    - 'which ssh-agent || ( yum -y install openssh-client )'
-    - eval $(ssh-agent -s) 
-    - ssh-add <(echo "$SSH_PRIVATE_KEY")
-    - mkdir -p ~/.ssh
-    - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
   script:
     - echo "Running the playbook with ansible"
     - ansible-playbook --syntax-check -i inventory test.yml
@@ -20,15 +11,17 @@ Centos6Test:
 UbuntuTest:
   image: "ubuntu:16.04"
   before_script:
-    - apt-get update && apt-get -y install ansible openssh-server git 
+    - apt-get -y update; apt-get -y install ansible git 
     - echo 'pipelining = False' >> /etc/ansible/ansible.cfg
     - echo localhost > inventory
-    - useradd -m tmolnar
-    - 'which ssh-agent || ( apt-get -y install openssh-client )'
-    - eval $(ssh-agent -s) 
-    - ssh-add <(echo "$SSH_PRIVATE_KEY")
-    - mkdir -p ~/.ssh
-    - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
   script:
     - ansible-playbook --syntax-check -i inventory test.yml
     - ansible-playbook -i inventory test.yml --connection=local -u root --become-user=root
+DebianTest:
+  image: "debian:9"
+  before_script:
+    - apt-get -y update; apt-get -y install ansible git
+  script:
+    - ansible-playbook --syntax-check -i inventory test.yml
+    - ansible-playbook -i inventory test.yml --connection=local -u root --become-user=root
+    
