@@ -1,26 +1,26 @@
 Centos6Test:
   image: "centos:6"
   before_script:
+    - rpm -i https://dl.fedoraproject.org/pub/epel/epel-release-latest-6.noarch.rpm
     - yum -y install ansible git 
     - echo 'pipelining = False' >> /etc/ansible/ansible.cfg
     - echo localhost > inventory
   script:
-    - echo "Running the playbook with ansible"
     - ansible-playbook --syntax-check -i inventory test.yml
     - ansible-playbook -i inventory test.yml --connection=local -u root --become-user=root
 UbuntuTest:
   image: "ubuntu:16.04"
   before_script:
-    - apt-get -y update; apt-get -y install ansible git 
+    - apt-get update && apt-get -y install ansible git 
     - echo 'pipelining = False' >> /etc/ansible/ansible.cfg
     - echo localhost > inventory
-  script:
+   script:
     - ansible-playbook --syntax-check -i inventory test.yml
     - ansible-playbook -i inventory test.yml --connection=local -u root --become-user=root
 DebianTest:
   image: "debian:9"
   before_script:
-    - apt-get -y update; apt-get -y install ansible git
+    - apt-get update && apt-get -y install ansible git
   script:
     - ansible-playbook --syntax-check -i inventory test.yml
     - ansible-playbook -i inventory test.yml --connection=local -u root --become-user=root
