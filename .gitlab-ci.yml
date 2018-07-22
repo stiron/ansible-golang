@@ -1,34 +1,11 @@
-Centos6Test:
-  image: "centos:6"
+DebianTest:
+  image: "debian:9"
   before_script:
-    - rpm -i https://dl.fedoraproject.org/pub/epel/epel-release-latest-6.noarch.rpm
-    - yum -y install ansible openssh-server openssh-client git 
-    - chkconfig sshd on
-    - service sshd start
-    - echo 'pipelining = False' >> /etc/ansible/ansible.cfg
-    - echo localhost > inventory
-    - useradd -m tmolnar
-    - 'which ssh-agent || ( yum -y install openssh-client )'
-    - eval $(ssh-agent -s) 
-    - ssh-add <(echo "$SSH_PRIVATE_KEY")
-    - mkdir -p ~/.ssh
-    - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
-  script:
-    - echo "Running the playbook with ansible"
-    - ansible-playbook --syntax-check -i inventory test.yml
-    - ansible-playbook -i inventory test.yml --connection=local -u root --become-user=root
-UbuntuTest:
-  image: "ubuntu:16.04"
-  before_script:
-    - apt-get update && apt-get -y install ansible openssh-server git 
-    - echo 'pipelining = False' >> /etc/ansible/ansible.cfg
-    - echo localhost > inventory
-    - useradd -m tmolnar
-    - 'which ssh-agent || ( apt-get -y install openssh-client )'
-    - eval $(ssh-agent -s) 
-    - ssh-add <(echo "$SSH_PRIVATE_KEY")
-    - mkdir -p ~/.ssh
-    - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+    - echo 'deb http://ftp.debian.org/debian stretch-backports main contrib non-free' >> /etc/apt/sources.list
+    - apt -y update
+    - apt-get -y -t stretch-backports install ansible
+    - apt -y install git
+    - echo 'localhost ansible_connection=local ansible_user=root' > inventory
   script:
     - ansible-playbook --syntax-check -i inventory test.yml
-    - ansible-playbook -i inventory test.yml --connection=local -u root --become-user=root
+    - ansible-playbook -i inventory test.yml
