@@ -8,7 +8,7 @@ This module requires Ansible 2.x version.
 
 No other dependencies have been set.
 
-This module is tested on Debian Stable.
+This module is tested on Debian 9 (Stretch).
 
 ## Role variables
 
