@@ -12,7 +12,7 @@ This module is tested on Debian 9 (Stretch).
 
 ## Role variables
 
-`go_target_version` - consists of the "go" string and the exact target version, e.g. go1.10.3
+`go_target_version` - consists of the "go" string and the exact target version, e.g. go1.11.1
 
 `go_target_dir` - target directory where the go tools must be extracted/installed
 
@@ -20,7 +20,7 @@ This module is tested on Debian 9 (Stretch).
 
 	- hosts: all
 		roles:
-		  - {role: golang, go_target_version: go1.10.3, go_target_dir: /usr/local }
+		  - {role: golang, go_target_version: go1.11.1, go_target_dir: /usr/local }
 
 ## Dependencies
 

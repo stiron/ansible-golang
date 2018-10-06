@@ -9,3 +9,4 @@ DebianTest:
   script:
     - ansible-playbook --syntax-check -i inventory test.yml
     - ansible-playbook -i inventory test.yml
+    - ansible-playbook -i inventory test.yml |grep -q 'changed=0.*failed=0' || exit 1
